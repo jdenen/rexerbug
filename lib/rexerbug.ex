@@ -20,6 +20,11 @@ defmodule Rexerbug do
     "#{mod}.#{info[:name]}/#{info[:arity]}"
   end
 
+  defp parse_pattern({module, fun}) do
+    mod = mod_name(module)
+    "#{mod}.#{fun}/_"
+  end
+
   defp parse_pattern(pattern), do: pattern
 
   defp ensure_return(pattern) do

@@ -27,6 +27,11 @@ defmodule RexerbugTest do
       expect(RexbugMock, :start, fn "String.split/2 :: return;stack", _ -> @return end)
       Rexerbug.trace(&String.split/2)
     end
+
+    test "parses {mod, fun} argument" do
+      expect(RexbugMock, :start, fn "String.split/_ :: return;stack", _ -> @return end)
+      Rexerbug.trace({String, :split})
+    end
   end
 
   describe "rexbug/0" do
