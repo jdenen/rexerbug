@@ -32,6 +32,23 @@ defmodule RexerbugTest do
       expect(RexbugMock, :start, fn "String.split/_ :: return;stack", _ -> @return end)
       Rexerbug.trace({String, :split})
     end
+
+    test "parses {mod, fun, args} with binary args" do
+      expect(RexbugMock, :start, fn ~s|String.split("abc", "b") :: return;stack|, _ -> @return end)
+
+      Rexerbug.trace({String, :split, ["abc", "b"]})
+    end
+
+    test "parses {mod, fun, args} argument" do
+      args = [[1, "a", :b, ["a", :b, 3], %{"a" => 1}, %{b: 2}, {1, 2}, [key: :word]]]
+
+      expected =
+        ~s|List.first([1, "a", :b, ["a", :b, 3], %{"a" => 1}, %{b: 2}, {1, 2}, [key: :word]]) :: return;stack|
+
+      expect(RexbugMock, :start, fn ^expected, _ -> @return end)
+
+      Rexerbug.trace({List, :first, args})
+    end
   end
 
   describe "rexbug/0" do

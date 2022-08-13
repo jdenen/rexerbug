@@ -25,7 +25,20 @@ defmodule Rexerbug do
     "#{mod}.#{fun}/_"
   end
 
+  defp parse_pattern({module, fun, args}) when is_list(args) do
+    mod = mod_name(module)
+    args = parse_args(args)
+
+    "#{mod}.#{fun}(#{args})"
+  end
+
   defp parse_pattern(pattern), do: pattern
+
+  defp parse_args(args) do
+    args
+    |> Enum.map(&inspect/1)
+    |> Enum.join(", ")
+  end
 
   defp ensure_return(pattern) do
     case String.split(pattern, "::") do
