@@ -49,6 +49,14 @@ defmodule RexerbugTest do
 
       Rexerbug.trace({List, :first, args})
     end
+
+    test "parses module argument" do
+      expect(RexbugMock, :start, fn "Map :: return;stack", _ -> @return end)
+      Rexerbug.trace(Map)
+
+      expect(RexbugMock, :start, fn ":ets :: return;stack", _ -> @return end)
+      Rexerbug.trace(:ets)
+    end
   end
 
   describe "rexbug/0" do

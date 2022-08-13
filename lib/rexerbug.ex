@@ -32,6 +32,10 @@ defmodule Rexerbug do
     "#{mod}.#{fun}(#{args})"
   end
 
+  defp parse_pattern(pattern) when is_atom(pattern) do
+    mod_name(pattern)
+  end
+
   defp parse_pattern(pattern), do: pattern
 
   defp parse_args(args) do
@@ -48,8 +52,12 @@ defmodule Rexerbug do
   end
 
   defp mod_name(mod) do
-    mod
-    |> to_string()
-    |> String.trim_leading("Elixir.")
+    case Module.split(mod) do
+      [mod] -> mod
+      mods -> Module.concat(mods)
+    end
+  rescue
+    _ ->
+      inspect(mod)
   end
 end
