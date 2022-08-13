@@ -1,18 +1,6 @@
 defmodule Rexerbug do
-  @moduledoc """
-  Documentation for `Rexerbug`.
-  """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Rexerbug.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  @doc false
+  def rexbug do
+    Application.get_env(:rexerbug, :rexbug, Rexbug)
   end
 end

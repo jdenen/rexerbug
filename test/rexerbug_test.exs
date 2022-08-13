@@ -1,8 +1,9 @@
 defmodule RexerbugTest do
   use ExUnit.Case
-  doctest Rexerbug
 
-  test "greets the world" do
-    assert Rexerbug.hello() == :world
+  describe "rexbug/0" do
+    test "returns configured rexbug client" do
+      assert Rexerbug.rexbug() == RexbugMock
+    end
   end
 end
