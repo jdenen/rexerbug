@@ -22,6 +22,7 @@ defmodule Rexerbug.MixProject do
   defp deps do
     [
       {:rexbug, "~> 1.0"},
+      {:dialyxir, "~> 1.2", only: :dev, runtime: false},
       {:mox, "~> 1.0", only: :test}
     ]
   end
