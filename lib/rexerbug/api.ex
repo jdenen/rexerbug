@@ -1,4 +1,4 @@
-defmodule Rexerbug.RexbugApi do
+defmodule Rexerbug.Api do
   @moduledoc """
   Callbacks that must be handled by a Rexbug implementation.
   """
@@ -10,4 +10,8 @@ defmodule Rexerbug.RexbugApi do
           | Rexbug.trace_pattern()
 
   @callback start(pattern, Rexbug.options()) :: Rexbug.rexbug_return()
+
+  def rexbug do
+    Application.get_env(:rexerbug, :rexbug, Rexbug)
+  end
 end

@@ -58,10 +58,4 @@ defmodule RexerbugTest do
       Rexerbug.trace(:ets)
     end
   end
-
-  describe "rexbug/0" do
-    test "returns configured rexbug client" do
-      assert Rexerbug.rexbug() == RexbugMock
-    end
-  end
 end
