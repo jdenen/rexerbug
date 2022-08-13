@@ -3,20 +3,29 @@ defmodule RexerbugTest do
 
   import Mox
 
+  @return {100, 42}
+
   setup :verify_on_exit!
 
   describe "start/2" do
-    test "passes trace pattern to Rexbug" do
+    test "passes arguments to Rexbug" do
       pattern = "Map.new/0 :: stack"
-      expect(RexbugMock, :start, fn ^pattern, _ -> {100, 42} end)
+      opts = [time: 1_000]
 
-      assert {_, _} = Rexerbug.trace(pattern)
+      expect(RexbugMock, :start, fn ^pattern, ^opts -> @return end)
+      Rexerbug.trace(pattern, opts)
     end
 
-    test "passes options to Rexbug" do
-      opts = [time: 1_000]
-      expect(RexbugMock, :start, fn _, ^opts -> {100, 42} end)
-      assert {_, _} = Rexerbug.trace("Map.new/0 :: stack", opts)
+    test "defaults return value to 'return;stack'" do
+      expected_pattern = "Map.new/0 :: return;stack"
+
+      expect(RexbugMock, :start, fn ^expected_pattern, _ -> @return end)
+      Rexerbug.trace("Map.new/0")
+    end
+
+    test "parses function argument" do
+      expect(RexbugMock, :start, fn "String.split/2 :: return;stack", _ -> @return end)
+      Rexerbug.trace(&String.split/2)
     end
   end
 
