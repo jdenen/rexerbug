@@ -48,9 +48,7 @@ defmodule Rexerbug.Tracer do
   defp parse_pattern(pattern), do: pattern
 
   defp parse_args(args) do
-    args
-    |> Enum.map(&inspect/1)
-    |> Enum.join(", ")
+    Enum.map_join(args, ", ", &inspect/1)
   end
 
   defp ensure_return(pattern) do
