@@ -77,8 +77,15 @@ defmodule Rexerbug do
   for details.
   """
   @spec monitor(pid | :all | :new, Rexerbug.Options.t()) :: Rexbug.rexbug_return()
-  def monitor(pid, opts \\ []) when is_pid(pid) do
+  def monitor(pid, opts \\ [])
+
+  def monitor(pid, opts) when is_pid(pid) do
     opts = Keyword.merge(opts, pids: [pid])
+    trace([:send, :receive], opts)
+  end
+
+  def monitor(pid, opts) when pid in [:all, :new] do
+    opts = Keyword.merge(opts, pids: pid)
     trace([:send, :receive], opts)
   end
 

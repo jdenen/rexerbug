@@ -57,10 +57,26 @@ defmodule RexerbugTest do
       pid = self()
 
       expect(RexbugMock, :start, fn [:send, :receive], opts ->
-        assert [^pid] = Keyword.get(opts, :procs)
+        assert Keyword.get(opts, :procs) == [pid]
       end)
 
       Rexerbug.monitor(pid)
+    end
+
+    test "allows :all processes to be monitored" do
+      expect(RexbugMock, :start, fn [:send, :receive], opts ->
+        assert Keyword.get(opts, :procs) == :all
+      end)
+
+      Rexerbug.monitor(:all)
+    end
+
+    test "allows :new processes to be monitored" do
+      expect(RexbugMock, :start, fn [:send, :receive], opts ->
+        assert Keyword.get(opts, :procs) == :new
+      end)
+
+      Rexerbug.monitor(:new)
     end
 
     test "passes options through to Rexbug" do
