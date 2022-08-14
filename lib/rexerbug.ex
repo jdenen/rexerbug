@@ -54,13 +54,8 @@ defmodule Rexerbug do
 
   ## Options
 
-  Some options are renamed:
-
-  - `msgs: 10` is changed to `count: 10`
-  - `time: 60_000` is changed to `timeout: 60_000`
-  - `procs: [pid]` is changed to `pids: [pid]`
-
-  Most are the same as `Rexbug`/`:redbug`. See `Rexerbug.Options` for details.
+  Some options are renamed. Most are the same as `Rexbug`/`:redbug`.
+  See `Rexerbug.Options` for details.
   """
   @spec trace(pattern, Rexerbug.Options.t()) :: Rexbug.rexbug_return()
   defdelegate trace(pattern, opts \\ []), to: Rexerbug.Tracer
@@ -78,8 +73,8 @@ defmodule Rexerbug do
 
   ## Options
 
-  Uses the same options parsing as `Rexerbug.trace/2`. See the options
-  section of that function's documentation or `Rexerbug.Options`.
+  Uses the same options parsing as `Rexerbug.trace/2`. See `Rexerbug.Options`
+  for details.
   """
   @spec monitor(pid, Rexerbug.Options.t()) :: Rexbug.rexbug_return()
   def monitor(pid, opts \\ []) when is_pid(pid) do

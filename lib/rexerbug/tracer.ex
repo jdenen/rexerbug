@@ -1,7 +1,8 @@
 defmodule Rexerbug.Tracer do
   @moduledoc false
 
-  @typep monitor_pattern :: [atom]
+  @typep monitor_event :: :send | :receive
+  @typep monitor_pattern :: [monitor_event]
 
   @monitor_pattern [:send, :receive]
 
