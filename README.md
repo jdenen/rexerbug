@@ -92,7 +92,7 @@ events are assumed when `monitor/2`ing a process.
 ```elixir
 def deps do
   [
-    {:rexerbug, "~> 0.1.0"}
+    {:rexerbug, "~> 1.0.0"}
   ]
 end
 ```
