@@ -61,9 +61,11 @@ defmodule Rexerbug.Tracer do
   end
 
   defp mod_name(mod) do
+    # Check if this is a module like String
+    # or an atom like :ets.
     case Module.split(mod) do
       [mod] -> mod
-      mods -> Module.concat(mods)
+      _ -> mod
     end
   rescue
     _ ->
