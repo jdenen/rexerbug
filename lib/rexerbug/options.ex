@@ -7,20 +7,24 @@ defmodule Rexerbug.Options do
   - `:count` stops tracing after `n` number of messages are traced.
   - `:timeout` stops tracing after `n` milliseconds.
   - `:pids` limits tracing to the list of processes.
+  - `:connect` connects to the target `node` for remote tracing.
+  - `arity?` toggles printng arity instead of arguments.
+  - `buffer?` toggles buffering messages until the trace ends.
+  - `discard?` toggles into discarding traced messages.
   """
 
   @type rexerbug ::
           {:count, integer}
           | {:timeout, integer}
           | {:pids, [Process.dest()]}
+          | {:connect, Node.t()}
+          | {:arity?, boolean}
+          | {:buffer?, boolean}
+          | {:discard?, boolean}
 
   @type rexbug ::
-          {:target, Node.t()}
-          | {:cookie, String.t()}
+          {:cookie, String.t()}
           | {:blocking, boolean}
-          | {:arity, boolean}
-          | {:buffered, boolean}
-          | {:discard, boolean}
           | {:max_queue, integer}
           | {:max_msg_size, integer}
           | {:print_calls, boolean}
@@ -46,10 +50,25 @@ defmodule Rexerbug.Options do
   """
   @spec parse(t) :: [result]
   def parse(opts) do
-    {count, opts} = Keyword.pop_first(opts, :count, 10)
-    {timeout, opts} = Keyword.pop_first(opts, :timeout, 60_000)
-    {pids, opts} = Keyword.pop_first(opts, :pids, :all)
+    {rexerbug_opts, rexbug_opts} =
+      Enum.map_reduce(key_conversions(), opts, fn {rexer, rex, default}, acc ->
+        {value, acc} = Keyword.pop_first(acc, rexer, default)
+        {{rex, value}, acc}
+      end)
 
-    Keyword.merge(opts, msgs: count, time: timeout, procs: pids)
+    Keyword.merge(rexbug_opts, rexerbug_opts)
+  end
+
+  # {rexerbug_key, rexbug_key, default}
+  defp key_conversions do
+    [
+      {:count, :msgs, 10},
+      {:timeout, :time, 60_000},
+      {:pids, :procs, :all},
+      {:connect, :target, Node.self()},
+      {:arity?, :arity, false},
+      {:buffer?, :buffered, false},
+      {:discard?, :discard, false}
+    ]
   end
 end
