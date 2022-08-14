@@ -18,6 +18,8 @@ defmodule Rexerbug do
           | module
           | Rexbug.trace_pattern()
 
+  @typep stop_response :: :stopped | :not_started
+
   @doc """
   Starts `Rexbug`/`:redbug` tracing for the given pattern.
 
@@ -47,4 +49,16 @@ defmodule Rexerbug do
   """
   @spec trace(pattern, Keyword.t()) :: Rexbug.rexbug_return()
   defdelegate trace(pattern, opts \\ []), to: Rexerbug.MfaTracer
+
+  @doc """
+  See `Rexbug.stop/0`.
+  """
+  @spec stop() :: stop_response
+  defdelegate stop(), to: Rexbug
+
+  @doc """
+  See `Rexbug.stop_sync/1`.
+  """
+  @spec stop_sync(integer) :: stop_response | {:error, :could_not_stop_redbug}
+  defdelegate stop_sync(n), to: Rexbug
 end
