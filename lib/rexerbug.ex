@@ -54,7 +54,7 @@ defmodule Rexerbug do
       Rexerbug.trace("List.first/1 :: return")
   """
   @spec trace(pattern, Keyword.t()) :: Rexbug.rexbug_return()
-  defdelegate trace(pattern, opts \\ []), to: Rexerbug.MfaTracer
+  defdelegate trace(pattern, opts \\ []), to: Rexerbug.Tracer
 
   @doc """
   Starts tracing `:send` and `:receive` events for a specific process mailbox.

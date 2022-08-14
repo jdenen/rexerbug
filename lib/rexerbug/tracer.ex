@@ -1,4 +1,4 @@
-defmodule Rexerbug.MfaTracer do
+defmodule Rexerbug.Tracer do
   @moduledoc false
 
   @typep monitor_pattern :: [atom]
