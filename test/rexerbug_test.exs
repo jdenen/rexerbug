@@ -10,10 +10,9 @@ defmodule RexerbugTest do
   describe "trace/2" do
     test "passes arguments to Rexbug" do
       pattern = "Map.new/0 :: stack"
-      opts = [time: 1_000]
 
-      expect(RexbugMock, :start, fn ^pattern, ^opts -> @return end)
-      Rexerbug.trace(pattern, opts)
+      expect(RexbugMock, :start, fn ^pattern, _opts -> @return end)
+      Rexerbug.trace(pattern)
     end
 
     test "defaults return value to 'return;stack'" do
@@ -69,24 +68,11 @@ defmodule RexerbugTest do
 
       expect(RexbugMock, :start, fn _, opts ->
         assert opts[:time] == 1_000
-        assert opts[:msgs] == 10
+        assert opts[:cookie] == "hello there"
+        @return
       end)
 
-      Rexerbug.monitor(pid, time: 1_000)
-    end
-
-    test "converts :count option to :msgs" do
-      pid = self()
-
-      expect(RexbugMock, :start, fn _, opts -> assert opts[:msgs] == 42 end)
-      Rexerbug.monitor(pid, count: 42)
-    end
-
-    test "overwrites :msgs opt" do
-      pid = self()
-
-      expect(RexbugMock, :start, fn _, opts -> assert opts[:msgs] == 42 end)
-      Rexerbug.monitor(pid, count: 42, msgs: 1_000)
+      Rexerbug.monitor(pid, timeout: 1_000, cookie: "hello there")
     end
   end
 end

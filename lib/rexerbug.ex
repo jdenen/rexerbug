@@ -30,8 +30,9 @@ defmodule Rexerbug do
   Starts `Rexbug`/`:redbug` tracing for the given pattern.
 
   Pattern will be converted to a `Rexbug.trace_pattern` with a `return;stack`
-  return value. Options are passed straight through to `Rexbug`. See
-  `Rexbug.start/2` for possible options.
+  return value.
+
+  ## Trace patterns
 
   Pass a first class function to match against a function with specific
   arity. This will not work with anonymous functions.
@@ -52,31 +53,39 @@ defmodule Rexerbug do
   Rexbug binary patterns will be passed through.
 
       Rexerbug.trace("List.first/1 :: return")
+
+  ## Options
+
+  Some options are renamed:
+
+  - `msgs: 10` is changed to `count: 10`
+  - `time: 60_000` is changed to `timeout: 60_000`
+  - `procs: [pid]` is changed to `pids: [pid]`
+
+  Most are the same as `Rexbug`/`:redbug`. See `Rexerbug.Options` for details.
   """
-  @spec trace(pattern, Keyword.t()) :: Rexbug.rexbug_return()
+  @spec trace(pattern, Rexerbug.Options.t()) :: Rexbug.rexbug_return()
   defdelegate trace(pattern, opts \\ []), to: Rexerbug.Tracer
 
   @doc """
   Starts tracing `:send` and `:receive` events for a specific process mailbox.
-  See `Rexbug.start/2` for possible options, but know that `procs` will be
-  set with the given process.
 
-      Rexerbug.monitor(pid, time: 300_000)
+  ## Tracing
+
+      Rexerbug.monitor(pid)
 
   This function is a convenience helper. It's equivalent to:
 
-      Rexerbug.trace([:send, :receive], procs: [pid])
+      Rexerbug.trace([:send, :receive], pids: [pid])
 
-  A new `:count` option is available in case you can never remember `:msgs`.
+  ## Options
 
-      # Rexbug.start([:send, :receive], procs: [pid], msgs: 1_000)
-      Rexerbug.monitor(pid, count: 1_000)
+  Uses the same options parsing as `Rexerbug.trace/2`. See the options
+  section of that function's documentation or `Rexerbug.Options`.
   """
-  @spec monitor(pid, Keyword.t()) :: Rexbug.rexbug_return()
+  @spec monitor(pid, Rexerbug.Options.t()) :: Rexbug.rexbug_return()
   def monitor(pid, opts \\ []) when is_pid(pid) do
-    {count, opts} = Keyword.pop_first(opts, :count, 10)
-    opts = Keyword.merge(opts, procs: [pid], msgs: count)
-
+    opts = Keyword.merge(opts, pids: [pid])
     trace([:send, :receive], opts)
   end
 

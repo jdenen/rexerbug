@@ -7,11 +7,13 @@ defmodule Rexerbug.Tracer do
 
   @spec trace(Rexerbug.pattern() | monitor_pattern, Keyword.t()) :: Rexbug.rexbug_return()
   def trace(@monitor_pattern, opts) do
+    opts = Rexerbug.Options.parse(opts)
     Rexerbug.Api.rexbug().start(@monitor_pattern, opts)
   end
 
   def trace(pattern, opts) do
     rexbug = Rexerbug.Api.rexbug()
+    opts = Rexerbug.Options.parse(opts)
 
     pattern
     |> parse_pattern()
