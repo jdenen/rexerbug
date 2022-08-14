@@ -7,7 +7,7 @@ defmodule RexerbugTest do
 
   setup :verify_on_exit!
 
-  describe "start/2" do
+  describe "trace/2" do
     test "passes arguments to Rexbug" do
       pattern = "Map.new/0 :: stack"
       opts = [time: 1_000]
@@ -50,6 +50,43 @@ defmodule RexerbugTest do
 
       expect(RexbugMock, :start, fn ":ets :: return;stack", _ -> @return end)
       Rexerbug.trace(:ets)
+    end
+  end
+
+  describe "monitor/2" do
+    test "traces :send and :receive events for a given process" do
+      pid = self()
+
+      expect(RexbugMock, :start, fn [:send, :receive], opts ->
+        assert [^pid] = Keyword.get(opts, :procs)
+      end)
+
+      Rexerbug.monitor(pid)
+    end
+
+    test "passes options through to Rexbug" do
+      pid = self()
+
+      expect(RexbugMock, :start, fn _, opts ->
+        assert opts[:time] == 1_000
+        assert opts[:msgs] == 10
+      end)
+
+      Rexerbug.monitor(pid, time: 1_000)
+    end
+
+    test "converts :count option to :msgs" do
+      pid = self()
+
+      expect(RexbugMock, :start, fn _, opts -> assert opts[:msgs] == 42 end)
+      Rexerbug.monitor(pid, count: 42)
+    end
+
+    test "overwrites :msgs opt" do
+      pid = self()
+
+      expect(RexbugMock, :start, fn _, opts -> assert opts[:msgs] == 42 end)
+      Rexerbug.monitor(pid, count: 42, msgs: 1_000)
     end
   end
 end

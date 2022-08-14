@@ -9,6 +9,12 @@ defmodule Rexerbug do
   to make up for it.
 
       Rexerbug.trace("Foo.bar(a, b) when is_binary(b) :: stack")
+
+  Process mailboxes can be traced, too.
+
+      Rexerbug.monitor(pid)
+
+      Rexerbug.monitor(pid, 1_000)
   """
 
   @type pattern ::
@@ -49,6 +55,30 @@ defmodule Rexerbug do
   """
   @spec trace(pattern, Keyword.t()) :: Rexbug.rexbug_return()
   defdelegate trace(pattern, opts \\ []), to: Rexerbug.MfaTracer
+
+  @doc """
+  Starts tracing `:send` and `:receive` events for a specific process mailbox.
+  See `Rexbug.start/2` for possible options, but know that `procs` will be
+  set with the given process.
+
+      Rexerbug.monitor(pid, time: 300_000)
+
+  This function is a convenience helper. It's equivalent to:
+
+      Rexerbug.trace([:send, :receive], procs: [pid])
+
+  A new `:count` option is available in case you can never remember `:msgs`.
+
+      # Rexbug.start([:send, :receive], procs: [pid], msgs: 1_000)
+      Rexerbug.monitor(pid, count: 1_000)
+  """
+  @spec monitor(pid, Keyword.t()) :: Rexbug.rexbug_return()
+  def monitor(pid, opts \\ []) when is_pid(pid) do
+    {count, opts} = Keyword.pop_first(opts, :count, 10)
+    opts = Keyword.merge(opts, procs: [pid], msgs: count)
+
+    trace([:send, :receive], opts)
+  end
 
   @doc """
   See `Rexbug.stop/0`.

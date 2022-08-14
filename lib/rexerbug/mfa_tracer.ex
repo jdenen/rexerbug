@@ -1,7 +1,15 @@
 defmodule Rexerbug.MfaTracer do
   @moduledoc false
 
-  @spec trace(Rexerbug.pattern(), Keyword.t()) :: Rexbug.rexbug_return()
+  @typep monitor_pattern :: [atom]
+
+  @monitor_pattern [:send, :receive]
+
+  @spec trace(Rexerbug.pattern() | monitor_pattern, Keyword.t()) :: Rexbug.rexbug_return()
+  def trace(@monitor_pattern, opts) do
+    Rexerbug.Api.rexbug().start(@monitor_pattern, opts)
+  end
+
   def trace(pattern, opts) do
     rexbug = Rexerbug.Api.rexbug()
 
