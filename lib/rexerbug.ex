@@ -76,7 +76,7 @@ defmodule Rexerbug do
   Uses the same options parsing as `Rexerbug.trace/2`. See `Rexerbug.Options`
   for details.
   """
-  @spec monitor(pid, Rexerbug.Options.t()) :: Rexbug.rexbug_return()
+  @spec monitor(pid | :all | :new, Rexerbug.Options.t()) :: Rexbug.rexbug_return()
   def monitor(pid, opts \\ []) when is_pid(pid) do
     opts = Keyword.merge(opts, pids: [pid])
     trace([:send, :receive], opts)
