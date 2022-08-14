@@ -4,13 +4,13 @@ An opinionated wrapper for Elixir trace debugging
 
 ## What?
 
-[Rexbug](https://github.com/nietaki/rexbug) wraps [:redbug](https://github.com/massemanet/redbug),
-providing a more Elixir-like syntax for trace debugging. But Rexbug isn't Elixir-y enough for me,
+[`Rexbug`](https://github.com/nietaki/rexbug) wraps [`:redbug`](https://github.com/massemanet/redbug),
+providing a more Elixir-like syntax for trace debugging. But `Rexbug` isn't Elixir-y enough for me,
 so I made `Rexerbug` to wrap `Rexbug`.
 
 ### Function tracing
 
-Instead of passing a magic string to Rexbug, you pass code that will be parsed into a trace.
+Instead of passing a magic string to `Rexbug`, you pass code that will be parsed into a trace.
 For example:
 
 ```elixir
@@ -55,7 +55,7 @@ Rexbug.start([:send, :receive], procs: [process])
 
 I've renamed some options toward more "expected" names. These are completely my own bias,
 but I think they make more sense. Here are the new names compared to the old. Shown values
-are the defaults, which have NOT changed from `Rexerbug` to `Rexbug`:
+are the defaults, which have NOT changed from `Rexbug` to `Rexerbug`:
 
 ```elixir
 Rexerbug.trace(
@@ -83,7 +83,7 @@ Rexbug.start(
 
 ### Caveats
 
-Because my wrapper is opinionated toward how _I_ always use `Rexbug`, it has lost some
+Because my wrapper is opinionated toward how I always use `Rexbug`, it has lost some
 flexibility. A return value of `return;stack` is assumed. Both `:send` and `:receive`
 events are assumed when `monitor/2`ing a process.
 
