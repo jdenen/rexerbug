@@ -5,9 +5,10 @@ defmodule Rexerbug.MixProject do
     [
       app: :rexerbug,
       version: "0.1.0",
-      elixir: "~> 1.13",
+      elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package()
     ]
   end
 
@@ -15,6 +16,14 @@ defmodule Rexerbug.MixProject do
   def application do
     [
       extra_applications: [:logger]
+    ]
+  end
+
+  defp package do
+    [
+      maintainers: ["Johnson Denen"],
+      licenses: ["Apache 2.0"],
+      links: %{"GitHub" => "https://github.com/jdenen/rexerbug"}
     ]
   end
 

@@ -13,8 +13,6 @@ defmodule Rexerbug do
   Process mailboxes can be traced, too.
 
       Rexerbug.monitor(pid)
-
-      Rexerbug.monitor(pid, 1_000)
   """
 
   @type pattern ::
